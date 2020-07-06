@@ -704,6 +704,6 @@ app.delete('/admin/deletebus/:regno', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log("port in 3000");
 })
