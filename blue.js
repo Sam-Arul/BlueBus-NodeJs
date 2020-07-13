@@ -89,25 +89,33 @@ app.post('/login/passenger', (req, res) => {
         var db = client.db('bluebus');
 
         db.collection('bluePassenger').findOne({ email: userData.email }, (err, data) => {
-            if (err) throw err;
-            bcrypt.compare(userData.password, data.password, (err, value) => {
-                if (err) throw err;
-                if (value) {
-                    let jwtToken = jwt.sign({ email: userData.email }, "abcdefhbjkanjfnaf");
-                    client.close();
-                    res.json({
-                        message: "Logged In",
-                        token: jwtToken,
-                        name: userData.name
-                    })
-                }
-                else {
-                    client.close();
-                    res.json({
-                        message: 'login failed'
-                    })
-                }
-            })
+            if(data){
+                bcrypt.compare(userData.password, data.password, (err, value) => {
+                    if (err) throw err;
+                    if (value) {
+                        let jwtToken = jwt.sign({ email: userData.email }, "abcdefhbjkanjfnaf");
+                        client.close();
+                        res.json({
+                            message: "Logged In",
+                            token: jwtToken,
+                            name: userData.name
+                        })
+                    }
+                    else {
+                        client.close();
+                        res.json({
+                            message: 'login failed'
+                        })
+                    }
+                })
+            }
+            else{
+                client.close();
+                        res.json({
+                            message: 'login failed'
+                        })
+            }
+            
         })
     })
 })
@@ -428,25 +436,33 @@ app.post('/operator/login/', (req, res) => {
         var db = client.db('bluebus');
 
         db.collection('blueOperator').findOne({ email: userData.email }, (err, data) => {
-            if (err) throw err;
-            bcrypt.compare(userData.password, data.password, (err, value) => {
-                if (err) throw err;
-                if (value) {
-                    let jwtToken = jwt.sign({ email: userData.email }, "qwertyuiopvxgxhmx");
-                    client.close();
-                    res.json({
-                        message: "Logged In",
-                        token: jwtToken,
-                        name: userData.name
-                    })
-                }
-                else {
-                    client.close();
-                    res.json({
-                        message: 'login failed'
-                    })
-                }
-            })
+            if(data){
+
+                bcrypt.compare(userData.password, data.password, (err, value) => {
+                    if (err) throw err;
+                    if (value) {
+                        let jwtToken = jwt.sign({ email: userData.email }, "qwertyuiopvxgxhmx");
+                        client.close();
+                        res.json({
+                            message: "Logged In",
+                            token: jwtToken,
+                            name: userData.name
+                        })
+                    }
+                    else {
+                        client.close();
+                        res.json({
+                            message: 'login failed'
+                        })
+                    }
+                })
+            }
+            else{
+                client.close();
+                        res.json({
+                            message: 'login failed'
+                        })
+            }
         })
     })
 })
@@ -575,20 +591,28 @@ app.post('/admin/login', (req, res) => {
         var db = client.db('bluebus');
 
         db.collection('blueAdmin').findOne({ 'email': userData.email }, (err, data) => {
-            if (err) throw err;
-            if (userData.password == data.password) {
-                client.close();
-                res.json({
-                    message: "Logged In",
-                })
+            if(data){
+
+                if (userData.password == data.password) {
+                    client.close();
+                    res.json({
+                        message: "Logged In",
+                    })
+                }
+                else {
+                    client.close();
+                    res.json({
+                        message: 'login failed'
+                    })
+                }
             }
-            else {
+            else{
                 client.close();
-                res.json({
-                    message: 'login failed'
-                })
+                    res.json({
+                        message: 'login failed'
+                    })
             }
-        })
+            })
     })
 })
 
@@ -704,6 +728,6 @@ app.delete('/admin/deletebus/:regno', (req, res) => {
     })
 })
 
-app.listen(process.env.PORT, () => {
+app.listen(3000, () => {
     console.log("port in 3000");
 })
